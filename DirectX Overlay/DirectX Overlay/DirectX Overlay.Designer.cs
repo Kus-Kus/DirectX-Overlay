@@ -1,4 +1,4 @@
-namespace DirectX_Overlay
+﻿namespace DirectX_Overlay
 {
     partial class Form1
     {

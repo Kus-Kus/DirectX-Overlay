@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,8 +16,8 @@ namespace DirectX_Overlay
 {
     public partial class Form1 : Form
     {
+
         private Margins marg;
-        
         public PresentParameters presentParams;
         public Texture texture;
         private static D3D.Font font;
@@ -121,7 +121,7 @@ namespace DirectX_Overlay
             DwmExtendFrameIntoClientArea(this.Handle, ref marg);
         }
 
-        // Method for Drawing String on screen
+        // Method for Drawing text on screen
         public static void DrawFont(string text, Point position, Color color)
         {
             font.DrawText(null, text, new Point(position.X + 1, position.Y + 1), Color.Black);
