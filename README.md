@@ -5,5 +5,4 @@ A basic template for Overlay using DirectX. Contains methods to draw:
 - Filled Boxes(Color)
 - Seperate Lines(Thickness, Color)
 
-http://i.imgur.com/7VH3Dzk.gif
-! [Imgur](http://i.imgur.com/7VH3Dzk.gifv)
+![Path Helper Demo](http://f.cl.ly/items/3C121F3E0P0A2o092I0w/output_optimized.gif)
