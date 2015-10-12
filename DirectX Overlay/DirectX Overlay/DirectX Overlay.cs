@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,6 +22,7 @@ namespace DirectX_Overlay
         public Texture texture;
         private static D3D.Font font;
         public static D3D.Line line;
+
 
         //This is used to specify the boundaries of the transparent area
         internal struct Margins
@@ -47,7 +48,7 @@ namespace DirectX_Overlay
         [DllImport("dwmapi.dll")]
         static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMargins);
 
-        private Device device = null;  
+        private Device device = null;
         public Form1()
         {
             InitializeComponent();
@@ -68,19 +69,21 @@ namespace DirectX_Overlay
             presentParameters.Windowed = true;
             presentParameters.SwapEffect = SwapEffect.Discard;
             presentParameters.BackBufferFormat = Format.A8R8G8B8;
-            
+
 
             this.device = new Device(0, DeviceType.Hardware, this.Handle,
             CreateFlags.HardwareVertexProcessing, presentParameters);
 
             line = new Microsoft.DirectX.Direct3D.Line(device);
             line = new D3D.Line(this.device);
-            font = new D3D.Font(device, new System.Drawing.Font("Arial", 15, FontStyle.Regular));
+
+
+            font = new D3D.Font(device, new System.Drawing.Font("Arial", 15, FontStyle.Bold));
 
             Thread dx = new Thread(new ThreadStart(this.dxThread));
             dx.IsBackground = true;
             dx.Start();
-            
+
 
         }
         private void dxThread()
@@ -94,17 +97,14 @@ namespace DirectX_Overlay
                 device.RenderState.CullMode = Cull.None;
                 device.Transform.Projection = Matrix.OrthoOffCenterLH(0, this.Width, this.Height, 0, 0, 1);
 
-                // Place your drawing login here
+                // Place your drawing logic here
                 device.BeginScene();
 
-                DrawLine(90, 19, 280, 19, 2, Color.BlanchedAlmond);
-                DrawLine(90, 19, 90, 220, 2f, Color.BurlyWood);
-                DrawLine(280, 19, 280, 220, 2, Color.BlanchedAlmond);
-                DrawLine(280, 220, 90, 220, 2, Color.BurlyWood);
+                DrawPoint(120, 120, Color.BlueViolet);
 
-                DrawBox(280, 220, 90, 220, 2, Color.Green);
+                DrawCircle(554, 550, 300, Color.Red);
 
-                font.DrawText(null, "Kusvlin", new Point(10, 10), Color.White);
+                font.DrawText(null, "Hello", new Point(550, 550), Color.DarkTurquoise);
 
                 device.EndScene();
                 device.Present();
@@ -126,6 +126,7 @@ namespace DirectX_Overlay
         {
             font.DrawText(null, text, new Point(position.X + 1, position.Y + 1), Color.Black);
             font.DrawText(null, text, position, color);
+
         }
 
         // Method for Drawing Lines
@@ -165,7 +166,7 @@ namespace DirectX_Overlay
             /* DrawFilledBox(0,0,10,10,Color.Green); */
         }
 
-        // Method for drawing Boxes
+        // Method for Drawing Boxes
         public static void DrawBox(float x, float y, float w, float h, float px, Color color)
         {
             DrawFilledBox(x, y + h, w, px, color);
@@ -176,6 +177,27 @@ namespace DirectX_Overlay
             /*              Example             */
             /* DrawBox(0,0,10,10,1,Color.Green); */
 
+        }
+
+        // Method for Drawing Circle
+        public static void DrawCircle(float x, float y, float radius, Color color)
+        {
+            float PI = 3.14159265f;
+            double t;
+            for (t = 0.000; t <= PI * 2; t += 0.001)
+                DrawPoint((float)(radius * Math.Cos(t) + x), (float)(radius * Math.Sin(t) + y), color);
+
+            /*              Example              */
+            /* DrawCircle(300,300,20,Color.Red); */
+        }
+
+        // Method for drawing a point on the screen
+        public static void DrawPoint(float x, float y, Color color)
+        {
+            DrawLine(x, y, x + 1, y + 1, 1, color);
+
+            /*           Example            */
+            /* DrawPoint(10,10,Color.Blue); */
         }
     }
 }
