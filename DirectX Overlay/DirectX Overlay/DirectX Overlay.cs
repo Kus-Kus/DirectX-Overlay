@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using D3D = Microsoft.DirectX.Direct3D;
 
 
+
 namespace DirectX_Overlay
 {
     public partial class Form1 : Form
@@ -45,6 +46,13 @@ namespace DirectX_Overlay
         public const int LWA_ALPHA = 0x2;
         public const int LWA_COLORKEY = 0x1;
 
+        Color red = Color.FromArgb(100, 255, 0, 0);
+        float CenterX = 0.0f;
+        float CenterY = 0.0f;
+
+        int CenterrX = 0;
+        int CenterrY = 0;
+
         [DllImport("dwmapi.dll")]
         static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMargins);
 
@@ -77,8 +85,15 @@ namespace DirectX_Overlay
             line = new Microsoft.DirectX.Direct3D.Line(device);
             line = new D3D.Line(this.device);
 
+            
 
-            font = new D3D.Font(device, new System.Drawing.Font("Arial", 15, FontStyle.Bold));
+            CenterX = (float)this.ClientSize.Width / 2;
+            CenterY = (float)this.ClientSize.Height / 2;
+
+            CenterrX = this.ClientSize.Width / 2;
+            CenterrY = this.ClientSize.Height / 2;
+
+            font = new D3D.Font(device, new System.Drawing.Font("Fixedsys Regular", 15, FontStyle.Bold));
 
             Thread dx = new Thread(new ThreadStart(this.dxThread));
             dx.IsBackground = true;
@@ -100,17 +115,17 @@ namespace DirectX_Overlay
                 // Place your drawing logic here
                 device.BeginScene();
 
-                DrawPoint(120, 120, Color.BlueViolet);
+                DrawLine(CenterX + 15, CenterY + 15, CenterX + 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104,204));
+                DrawLine(CenterX - 15, CenterY + 15, CenterX - 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104,204));
+                DrawLine(CenterX + 15, CenterY - 15, CenterX + 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104,204));
+                DrawLine(CenterX - 15, CenterY - 15, CenterX - 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104,204));
+                DrawPoint(CenterX - 1, CenterY - 1, Color.Blue);
 
-                DrawCircle(554, 550, 300, Color.Red);
-
-                font.DrawText(null, "Hello", new Point(550, 550), Color.DarkTurquoise);
 
                 device.EndScene();
                 device.Present();
             }
         }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             marg.Left = 0;
@@ -124,20 +139,24 @@ namespace DirectX_Overlay
         // Method for Drawing text on screen
         public static void DrawFont(string text, Point position, Color color)
         {
-            font.DrawText(null, text, new Point(position.X + 1, position.Y + 1), Color.Black);
+            font.DrawText(null, text, new Point(position.X, position.Y), Color.Black);
             font.DrawText(null, text, position, color);
-
         }
 
         // Method for Drawing Lines
         public static void DrawLine(float x1, float y1, float x2, float y2, float w, Color Color)
         {
-            Vector2[] vLine = new Vector2[2] { new Vector2(x1, y1), new Vector2(x2, y2) };
+            //Vector2[] vLine = new Vector2[2] { new Vector2(x1, y1), new Vector2(x2, y2) };
 
-            line.GlLines = true;
-            line.Antialias = false;
+            Vector2[] vLine = new Vector2[2];
+
             line.Width = w;
-
+            line.Antialias = false;
+            line.GlLines = true;
+            vLine[0].X = x1;
+            vLine[0].Y = y1;
+            vLine[1].X = x2;
+            vLine[1].Y = y2;
             line.Begin();
             line.Draw(vLine, Color.ToArgb());
             line.End();
@@ -149,9 +168,9 @@ namespace DirectX_Overlay
         {
             Vector2[] vLine = new Vector2[2];
 
+            line.Width = w;
             line.GlLines = true;
             line.Antialias = false;
-            line.Width = w;
 
             vLine[0].X = x + w / 2;
             vLine[0].Y = y;
@@ -176,16 +195,20 @@ namespace DirectX_Overlay
 
             /*              Example             */
             /* DrawBox(0,0,10,10,1,Color.Green); */
-
         }
 
-        // Method for Drawing Circle
+        // Method for Drawing Not perfect Circle
         public static void DrawCircle(float x, float y, float radius, Color color)
         {
             float PI = 3.14159265f;
-            double t;
-            for (t = 0.000; t <= PI * 2; t += 0.001)
-                DrawPoint((float)(radius * Math.Cos(t) + x), (float)(radius * Math.Sin(t) + y), color);
+            double t = 0; ;
+
+            for (t = 0.0; t <= PI * 2; t += 0.1)
+            {
+                x = (float)(x - radius * Math.Cos(t));
+                y = (float)(y - radius * Math.Sin(t));
+                DrawPoint(x, y, color);
+            }
 
             /*              Example              */
             /* DrawCircle(300,300,20,Color.Red); */
@@ -194,11 +217,36 @@ namespace DirectX_Overlay
         // Method for drawing a point on the screen
         public static void DrawPoint(float x, float y, Color color)
         {
-            DrawLine(x, y, x + 1, y + 1, 1, color);
+            DrawFilledBox(x, y, 1, 1, color);
 
             /*           Example            */
             /* DrawPoint(10,10,Color.Blue); */
         }
+
+        // Method for drawing Perfect Circle
+        private void Circle(int X, int Y, int radius, int numSides, Color color)
+        {
+
+            Vector2[] Line = new Vector2[128];
+            float Step = (float)(Math.PI * 2.0 / numSides);
+            int Count = 0;
+            for (float a = 0; a < Math.PI * 2.0; a += Step)
+            {
+                float X1 = (float)(radius * Math.Cos(a) + X);
+                float Y1 = (float)(radius * Math.Sin(a) + Y);
+                float X2 = (float)(radius * Math.Cos(a + Step) + X);
+                float Y2 = (float)(radius * Math.Sin(a + Step) + Y);
+                Line[Count].X = X1;
+                Line[Count].Y = Y1;
+                Line[Count + 1].X = X2;
+                Line[Count + 1].Y = Y2;
+                Count += 2;
+            }
+            line.Begin();
+            line.Draw(Line, color);
+            line.End();
+        }
+
     }
 }
 
