@@ -227,7 +227,7 @@ namespace DirectX_Overlay
         private void Circle(int X, int Y, int radius, int numSides, Color color)
         {
 
-            Vector2[] Line = new Vector2[128];
+            Vector2[] Line = new Vector2[numSides + 1];
             float Step = (float)(Math.PI * 2.0 / numSides);
             int Count = 0;
             for (float a = 0; a < Math.PI * 2.0; a += Step)
