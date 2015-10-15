@@ -26,6 +26,7 @@ namespace DirectX_Overlay
         public static D3D.Line drawLine;
         public static D3D.Line drawCircleLine;
         public static D3D.Line drawFilledBoxLine;
+        public static D3D.Line drawTriLine;
 
         //This is used to specify the boundaries of the transparent area
         internal struct Margins
@@ -88,6 +89,7 @@ namespace DirectX_Overlay
             drawBoxLine = new D3D.Line(this.device);
             drawCircleLine = new D3D.Line(this.device);
             drawFilledBoxLine = new D3D.Line(this.device);
+            drawTriLine = new D3D.Line(this.device);
 
             CenterX = (float)this.ClientSize.Width / 2;
             CenterY = (float)this.ClientSize.Height / 2;
@@ -123,9 +125,11 @@ namespace DirectX_Overlay
                 //DrawLine(CenterX - 15, CenterY - 15, CenterX - 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104, 204));
                 //DrawPoint(CenterX - 1, CenterY - 1, Color.Blue);
 
-                Circle(CenterrX, CenterrY, 10, 50, Color.Blue);
-                DrawBox(CenterrX, CenterrY, 10, 10, red);
-                DrawLine(CenterrX, CenterrY, 500, 500, 2, red);
+                DrawCircle(CenterrX, CenterrY, 10, 50, Color.Blue);
+                //DrawBox(CenterrX, CenterrY, 120, 120, Color.Peru);
+                //DrawLine(CenterrX, CenterrY, 500, 500, 2, red);
+                //DrawBox(CenterrX, CenterrY, 200, 200, Color.Peru);
+                DrawTriangle(CenterrX, CenterrY, 500, 500, Color.Navy);
 
                 device.EndScene();
                 device.Present();
@@ -246,7 +250,7 @@ namespace DirectX_Overlay
         }
 
         // Method for drawing Perfect Circle
-        private void Circle(int X, int Y, int radius, int numSides, Color color)
+        private void DrawCircle(int X, int Y, int radius, int numSides, Color color)
         {
             Vector2[] Line = new Vector2[100];
 
@@ -270,7 +274,26 @@ namespace DirectX_Overlay
             drawCircleLine.End();
 
             /*                    Example                         */
-            /* Circle(x Axis, y Axis, radius, numOfSides, color); */
+            /* DrawCircle(x Axis, y Axis, radius, numOfSides, color); */
+        }
+
+        // Method for drawing out a triangle
+        public static void DrawTriangle(int x, int y, int w, int h, Color c)
+        {
+
+            Vector2[] vertices =
+            {
+                new Vector2(x, y),
+                new Vector2(x + w, y),
+                new Vector2(x + (w / 2), y - h),
+                new Vector2(x, y)
+            };
+            drawBoxLine.Begin();
+            drawBoxLine.Draw(vertices, c);
+            drawBoxLine.End();
+
+            /*                    Example                         */
+            /* Triangle(x Axis, y Axis, base length, height, color); */
         }
     }
 }
