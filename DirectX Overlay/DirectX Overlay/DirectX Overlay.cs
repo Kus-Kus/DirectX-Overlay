@@ -20,9 +20,12 @@ namespace DirectX_Overlay
         private Margins marg;
         public PresentParameters presentParams;
         public Texture texture;
-        private static D3D.Font font;
-        public static D3D.Line line;
 
+        private static D3D.Font font;
+        public static D3D.Line drawBoxLine;
+        public static D3D.Line drawLine;
+        public static D3D.Line drawCircleLine;
+        public static D3D.Line drawFilledBoxLine;
 
         //This is used to specify the boundaries of the transparent area
         internal struct Margins
@@ -81,7 +84,10 @@ namespace DirectX_Overlay
             this.device = new Device(0, DeviceType.Hardware, this.Handle,
             CreateFlags.HardwareVertexProcessing, presentParameters);
 
-            line = new D3D.Line(this.device);
+            drawLine = new D3D.Line(this.device);
+            drawBoxLine = new D3D.Line(this.device);
+            drawCircleLine = new D3D.Line(this.device);
+            drawFilledBoxLine = new D3D.Line(this.device);
 
             CenterX = (float)this.ClientSize.Width / 2;
             CenterY = (float)this.ClientSize.Height / 2;
@@ -117,7 +123,9 @@ namespace DirectX_Overlay
                 //DrawLine(CenterX - 15, CenterY - 15, CenterX - 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104, 204));
                 //DrawPoint(CenterX - 1, CenterY - 1, Color.Blue);
 
-                Circle(CenterrX, CenterrY, 20, 50, Color.Firebrick);
+                Circle(CenterrX, CenterrY, 10, 50, Color.Blue);
+                DrawBox(CenterrX, CenterrY, 10, 10, red);
+                DrawLine(CenterrX, CenterrY, 500, 500, 2, red);
 
                 device.EndScene();
                 device.Present();
@@ -143,21 +151,19 @@ namespace DirectX_Overlay
         // Method for Drawing Lines
         public static void DrawLine(float x1, float y1, float x2, float y2, float w, Color Color)
         {
-            //Vector2[] vLine = new Vector2[2] { new Vector2(x1, y1), new Vector2(x2, y2) };
+            drawLine.Width = w;
+            drawLine.Antialias = false;
+            drawLine.GlLines = true;
 
-            Vector2[] vLine = new Vector2[2];
+            Vector2[] vertices = 
+            {
+                new Vector2(x1, y1),
+                new Vector2(x2, y2)
+            };
 
-            line.Width = w;
-            line.Antialias = false;
-            line.GlLines = true;
-            vLine[0].X = x1;
-            vLine[0].Y = y1;
-            vLine[1].X = x2;
-            vLine[1].Y = y2;
-            line.Begin();
-            line.Draw(vLine, Color.ToArgb());
-            line.End();
-
+            drawLine.Begin();
+            drawLine.Draw(vertices, Color.ToArgb());           
+            drawLine.End();
         }
 
         // Method for drawing Filled Boxes
@@ -165,25 +171,25 @@ namespace DirectX_Overlay
         {
             Vector2[] vLine = new Vector2[2];
 
-            line.Width = w;
-            line.GlLines = true;
-            line.Antialias = false;
+            drawFilledBoxLine.Width = w;
+            drawFilledBoxLine.GlLines = true;
+            drawFilledBoxLine.Antialias = false;
 
             vLine[0].X = x + w / 2;
             vLine[0].Y = y;
             vLine[1].X = x + w / 2;
             vLine[1].Y = y + h;
 
-            line.Begin();
-            line.Draw(vLine, Color.ToArgb());
-            line.End();
+            drawFilledBoxLine.Begin();
+            drawFilledBoxLine.Draw(vLine, Color.ToArgb());
+            drawFilledBoxLine.End();
 
             /*              Example             */
-            /* DrawFilledBox(0,0,10,10,Color.Green); */
+            /* DrawFilledBox(x , y, w, h, color); */
         }
 
-        // Method for Drawing Boxes
-        public static void DrawBox(float x, float y, float w, float h, float px, Color color)
+        // Method for Drawing Crosshair Boxes
+        public static void DrawCrosshairBox(float x, float y, float w, float h, float px, Color color)
         {
             DrawFilledBox(x, y + h, w, px, color);
             DrawFilledBox(x - px, y, px, h, color);
@@ -191,9 +197,28 @@ namespace DirectX_Overlay
             DrawFilledBox(x + w, y, px, h, color);
 
             /*              Example             */
-            /* DrawBox(0,0,10,10,1,Color.Green); */
+            /* DrawCrosshairBox(x , y, w, h, px, color); */
         }
 
+        // Method for drawing 2D Boxes
+        public static void DrawBox(float x, float y, float w, float h, Color color)
+        {
+            Vector2[] vertices = 
+            {
+                new Vector2(x, y),
+                new Vector2(x + w, y),
+                new Vector2(x + w, y + h),
+                new Vector2(x, y + h),
+                new Vector2(x, y)
+            };
+            drawBoxLine.Begin();
+            drawBoxLine.Draw(vertices, color);
+            drawBoxLine.End();
+
+            /*              Example             */
+            /* DrawBox(x , y, w, h, color); */
+        }
+      
         // Method for Drawing Not perfect Circle
         public static void DrawCircle(float x, float y, float radius, Color color)
         {
@@ -208,7 +233,7 @@ namespace DirectX_Overlay
             }
 
             /*              Example              */
-            /* DrawCircle(300,300,20,Color.Red); */
+            /* DrawCircle(x Axis, y Axis, radius, Color); */
         }
 
         // Method for drawing a point on the screen
@@ -217,7 +242,7 @@ namespace DirectX_Overlay
             DrawFilledBox(x, y, 1, 1, color);
 
             /*           Example            */
-            /* DrawPoint(10,10,Color.Blue); */
+            /* DrawPoint(x Axis, y Axis, Color */
         }
 
         // Method for drawing Perfect Circle
@@ -240,9 +265,12 @@ namespace DirectX_Overlay
                 Line[Count + 1].Y = Y2;
                 Count += 2;
             }
-            line.Begin();
-            line.Draw(Line, color);
-            line.End();
+            drawCircleLine.Begin();
+            drawCircleLine.Draw(Line, color);
+            drawCircleLine.End();
+
+            /*                    Example                         */
+            /* Circle(x Axis, y Axis, radius, numOfSides, color); */
         }
     }
 }
