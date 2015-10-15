@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 using D3D = Microsoft.DirectX.Direct3D;
 
 
-
 namespace DirectX_Overlay
 {
     public partial class Form1 : Form
@@ -82,10 +81,7 @@ namespace DirectX_Overlay
             this.device = new Device(0, DeviceType.Hardware, this.Handle,
             CreateFlags.HardwareVertexProcessing, presentParameters);
 
-            line = new Microsoft.DirectX.Direct3D.Line(device);
             line = new D3D.Line(this.device);
-
-            
 
             CenterX = (float)this.ClientSize.Width / 2;
             CenterY = (float)this.ClientSize.Height / 2;
@@ -115,12 +111,13 @@ namespace DirectX_Overlay
                 // Place your drawing logic here
                 device.BeginScene();
 
-                DrawLine(CenterX + 15, CenterY + 15, CenterX + 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104,204));
-                DrawLine(CenterX - 15, CenterY + 15, CenterX - 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104,204));
-                DrawLine(CenterX + 15, CenterY - 15, CenterX + 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104,204));
-                DrawLine(CenterX - 15, CenterY - 15, CenterX - 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104,204));
-                DrawPoint(CenterX - 1, CenterY - 1, Color.Blue);
+                //DrawLine(CenterX + 15, CenterY + 15, CenterX + 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104, 204));
+                //DrawLine(CenterX - 15, CenterY + 15, CenterX - 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104, 204));
+                //DrawLine(CenterX + 15, CenterY - 15, CenterX + 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104, 204));
+                //DrawLine(CenterX - 15, CenterY - 15, CenterX - 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104, 204));
+                //DrawPoint(CenterX - 1, CenterY - 1, Color.Blue);
 
+                Circle(CenterrX, CenterrY, 20, 50, Color.Firebrick);
 
                 device.EndScene();
                 device.Present();
@@ -226,8 +223,8 @@ namespace DirectX_Overlay
         // Method for drawing Perfect Circle
         private void Circle(int X, int Y, int radius, int numSides, Color color)
         {
+            Vector2[] Line = new Vector2[100];
 
-            Vector2[] Line = new Vector2[numSides + 1];
             float Step = (float)(Math.PI * 2.0 / numSides);
             int Count = 0;
             for (float a = 0; a < Math.PI * 2.0; a += Step)
@@ -236,6 +233,7 @@ namespace DirectX_Overlay
                 float Y1 = (float)(radius * Math.Sin(a) + Y);
                 float X2 = (float)(radius * Math.Cos(a + Step) + X);
                 float Y2 = (float)(radius * Math.Sin(a + Step) + Y);
+
                 Line[Count].X = X1;
                 Line[Count].Y = Y1;
                 Line[Count + 1].X = X2;
@@ -246,7 +244,6 @@ namespace DirectX_Overlay
             line.Draw(Line, color);
             line.End();
         }
-
     }
 }
 
