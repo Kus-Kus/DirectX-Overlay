@@ -50,6 +50,8 @@ namespace DirectX_Overlay
         public const int LWA_COLORKEY = 0x1;
 
         Color red = Color.FromArgb(100, 255, 0, 0);
+        Color green = Color.FromArgb(100, 0, 255, 0);
+        Color blue = Color.FromArgb(100, 0, 0, 255);
         float CenterX = 0.0f;
         float CenterY = 0.0f;
 
@@ -129,7 +131,16 @@ namespace DirectX_Overlay
                 //DrawBox(CenterrX, CenterrY, 120, 120, Color.Peru);
                 //DrawLine(CenterrX, CenterrY, 500, 500, 2, red);
                 //DrawBox(CenterrX, CenterrY, 200, 200, Color.Peru);
-                DrawTriangle(CenterrX, CenterrY, 500, 500, Color.Navy);
+                //DrawTriangle(CenterrX, CenterrY, 250, 500, Color.Azure);
+                //DrawTriangle(CenterrX - 20, CenterrY + 12, 290, 540, Color.Azure);
+                
+                // Draws 3D Cube
+                DrawBox(CenterrX, CenterrY, 200, 200, Color.Azure);
+                DrawBox(CenterrX + 100, CenterrY - 100, 200, 200, Color.Azure);
+                DrawLine(CenterrX, CenterrY, CenterrX + 100, CenterrY - 100, 2, Color.Azure);
+                DrawLine(CenterrX + 200, CenterrY, CenterrX + 300, CenterrY - 100, 2, Color.Azure);
+                DrawLine(CenterrX + 200, CenterrY + 200, CenterrX + 300, CenterrY + 100, 2, Color.Azure);
+                DrawLine(CenterrX, CenterrY + 200, CenterrX + 100, CenterrY + 100, 2, Color.Azure);
 
                 device.EndScene();
                 device.Present();
