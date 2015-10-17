@@ -1,6 +1,6 @@
 ﻿namespace DirectX_Overlay
 {
-    partial class Form1
+    partial class TransparentBorderlessForm
     {
         /// <summary>
         /// Required designer variable.

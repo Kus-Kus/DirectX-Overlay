@@ -14,7 +14,7 @@ using D3D = Microsoft.DirectX.Direct3D;
 
 namespace DirectX_Overlay
 {
-    public partial class Form1 : Form
+    public partial class TransparentBorderlessForm : Form
     {
 
         private Margins marg;
@@ -62,7 +62,7 @@ namespace DirectX_Overlay
         static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMargins);
 
         private Device device = null;
-        public Form1()
+        public TransparentBorderlessForm()
         {
             InitializeComponent();
         }
