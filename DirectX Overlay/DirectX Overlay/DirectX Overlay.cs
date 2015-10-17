@@ -52,6 +52,7 @@ namespace DirectX_Overlay
         Color red = Color.FromArgb(100, 255, 0, 0);
         Color green = Color.FromArgb(100, 0, 255, 0);
         Color blue = Color.FromArgb(100, 0, 0, 255);
+
         float CenterX = 0.0f;
         float CenterY = 0.0f;
 
@@ -121,20 +122,10 @@ namespace DirectX_Overlay
                 // Place your drawing logic here
                 device.BeginScene();
 
-                //DrawLine(CenterX + 15, CenterY + 15, CenterX + 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104, 204));
-                //DrawLine(CenterX - 15, CenterY + 15, CenterX - 3, CenterY + 3, 3, Color.FromArgb(100, 0, 104, 204));
-                //DrawLine(CenterX + 15, CenterY - 15, CenterX + 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104, 204));
-                //DrawLine(CenterX - 15, CenterY - 15, CenterX - 3, CenterY - 3, 3, Color.FromArgb(100, 0, 104, 204));
-                //DrawPoint(CenterX - 1, CenterY - 1, Color.Blue);
-
+                // Draws a Circle in the center of the screen.
                 DrawCircle(CenterrX, CenterrY, 10, 50, Color.Blue);
-                //DrawBox(CenterrX, CenterrY, 120, 120, Color.Peru);
-                //DrawLine(CenterrX, CenterrY, 500, 500, 2, red);
-                //DrawBox(CenterrX, CenterrY, 200, 200, Color.Peru);
-                //DrawTriangle(CenterrX, CenterrY, 250, 500, Color.Azure);
-                //DrawTriangle(CenterrX - 20, CenterrY + 12, 290, 540, Color.Azure);
                 
-                // Draws 3D Cube
+                // Draws 3D Cube.
                 DrawBox(CenterrX, CenterrY, 200, 200, Color.Azure);
                 DrawBox(CenterrX + 100, CenterrY - 100, 200, 200, Color.Azure);
                 DrawLine(CenterrX, CenterrY, CenterrX + 100, CenterrY - 100, 2, Color.Azure);
@@ -146,6 +137,7 @@ namespace DirectX_Overlay
                 device.Present();
             }
         }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             marg.Left = 0;
